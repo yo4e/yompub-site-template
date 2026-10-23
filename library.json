@@ -1,0 +1,9 @@
+{
+  "name": "余白文庫",
+  "description": "気の向く一冊を、ひらいてください。",
+  "books": [
+    { "id": "chair", "title": "椅子をひとつ", "author": "余白文庫", "tone": "linen", "assets": [] },
+    { "id": "rain", "title": "雨のとどけ先", "author": "余白文庫", "tone": "sage", "assets": [] },
+    { "id": "ticket", "title": "最後の切符", "author": "余白文庫", "tone": "rose", "assets": [] }
+  ]
+}

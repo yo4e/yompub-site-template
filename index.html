@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="小さな書棚から、縦書きの本をひらく。">
+  <meta name="color-scheme" content="light">
+  <title>小さな書棚</title>
+  <link rel="stylesheet" href="site.css">
+  <script type="module" src="site.mjs"></script>
+</head>
+<body>
+  <main>
+    <section id="shelf" aria-labelledby="site-name">
+      <header class="shelf-heading"><span class="imprint" aria-hidden="true">文庫</span><h1 id="site-name">小さな書棚</h1><p id="description">本を用意しています。</p></header>
+      <div id="books" class="books" aria-label="本を選ぶ"></div>
+      <p id="shelf-error" role="alert" hidden></p>
+      <footer class="shelf-footer">ひとつの窓に、ひとつの物語。</footer>
+    </section>
+    <section id="book-view" aria-label="選んだ本" hidden>
+      <header class="book-bar"><button id="back" type="button">書棚へ</button><span id="book-name"></span><button id="show-cover" type="button" hidden>表紙</button></header>
+      <div class="paper">
+        <div id="cover" class="title-page">
+          <div class="title-types"><h1 id="cover-title" tabindex="-1"></h1><p id="cover-author"></p></div>
+          <button id="read" type="button" disabled>ひらく <span aria-hidden="true">←</span></button>
+          <p id="load-message" role="status">本をひらいています。</p>
+          <button id="retry" type="button" hidden>もう一度ひらく</button>
+        </div>
+        <div id="reader-mount" hidden></div>
+      </div>
+      <nav id="reading-nav" aria-label="本文を移動" hidden><button id="next" type="button">← 次へ</button><span id="position" aria-live="off">右から左へ</span><button id="previous" type="button">前へ →</button></nav>
+      <p id="reading-hint" hidden>左右のスワイプ・スクロールでも読めます</p>
+    </section>
+    <noscript><p class="no-script">本をひらくにはJavaScriptを有効にしてください。原稿は <a href="books/chair/book.md">こちら</a> でも読めます。</p></noscript>
+  </main>
+</body>
+</html>
