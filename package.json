@@ -3,6 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
-  "scripts": { "dev": "node scripts/serve.mjs" }
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check site.mjs && node --check site-config.mjs && node --check scripts/serve.mjs && node --check vendor/yompub/reader.mjs && node --check vendor/yompub/parser-worker.mjs",
+    "test:ui": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
 }

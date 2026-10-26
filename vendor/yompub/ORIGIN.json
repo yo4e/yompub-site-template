@@ -1,15 +1,15 @@
 {
   "project": "https://github.com/yo4e/YomPUB",
   "format": "0.1-draft.1",
-  "source": "local prototype build; not a published package",
+  "source": "Build from the upstream YomPUB Git commit; not a published npm package",
   "sha256": {
-    "reader.mjs": "de631f3a0c831b8df6f0e1a9c5461863759bf9257d8bdd25e9f6816419856d64",
+    "reader.mjs": "473a50a6bc1d8bfea6442a801845f6350854619d58f886f944f6af864a4e2cf2",
     "parser-worker.mjs": "7094d982ce0cb29ccf93ec1a120a489bbad12df5c0c8f37f0848c10ab9ad4167"
   },
-  "source_commit": "153cc02eb2089264334d6bf0781f32c118ff182b",
-  "source_commit_status": "local YomPUB commit; not pushed upstream",
+  "source_commit": "62de9d71883fcb85689b2fa1a157a34133a1ad1a",
+  "source_commit_status": "merged into upstream main via PR #17",
   "upstream_sha256": {
-    "reader.mjs": "fc6361c9a9a4fe6baa02577f97e05c49d9ec808638c1cd7ccea7c26eb6d9cffc",
+    "reader.mjs": "94653fbb77b9588de295cbd12179e9a9617d649a0b819c789a7867ca616e45be",
     "parser-worker.mjs": "af1d0e7933fa236b0b10c241da7eede998f9bad74cc6e62fb1dd8a01e8fc653d"
   },
   "distribution_change": "Removed sourceMappingURL comments; source maps omitted; executable code unchanged."

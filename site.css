@@ -3,7 +3,7 @@
 [hidden] { display:none!important; }
 body { margin:0; background:var(--ground); color:var(--ink); }
 button { font:inherit; color:inherit; cursor:pointer; }
-button:focus-visible,a:focus-visible { outline:2px solid var(--accent); outline-offset:6px; }
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible { outline:2px solid var(--accent); outline-offset:6px; }
 button:disabled { cursor:default; opacity:.35; }
 #shelf { max-width:880px; margin:auto; padding:clamp(48px,12vh,110px) 24px 32px; }
 .shelf-heading { text-align:center; }
@@ -22,9 +22,20 @@ button:disabled { cursor:default; opacity:.35; }
 #book-view { max-width:1160px; margin:auto; padding:18px 32px 12px; }
 .book-bar { height:42px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px; font-size:12px; color:var(--muted); }
 .book-bar button { border:0; background:none; padding:10px 0; justify-self:start; }
-#show-cover { justify-self:end; }
+.book-actions { justify-self:end; display:flex; align-items:center; gap:16px; }
+#reading-settings { position:relative; color:var(--ink); font-family:system-ui,sans-serif; }
+#reading-settings summary { cursor:pointer; padding:10px 0; white-space:nowrap; color:var(--accent); }
+.settings-panel { position:absolute; top:100%; right:0; z-index:2; width:min(320px,calc(100vw - 24px)); display:grid; grid-template-columns:auto minmax(0,1fr); gap:16px 12px; align-items:center; padding:20px; border:1px solid var(--line); background:var(--paper); box-shadow:0 4px 16px #0002; font-size:13px; }
+.settings-panel select { width:100%; font:inherit; padding:6px; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:3px; }
+.slider-control { display:flex; align-items:center; gap:10px; min-width:0; }
+.slider-control output { min-width:3.5em; text-align:right; font-variant-numeric:tabular-nums; }
+.slider-control input { min-width:0; width:100%; height:24px; margin:0; accent-color:var(--accent); appearance:none; background:transparent; cursor:pointer; }
+.slider-control input::-webkit-slider-runnable-track { height:4px; background:var(--line); border-radius:2px; }
+.slider-control input::-webkit-slider-thumb { appearance:none; width:16px; height:16px; margin-top:-6px; border:0; border-radius:50%; background:var(--accent); }
+.slider-control input::-moz-range-track { height:4px; background:var(--line); border-radius:2px; }
+.slider-control input::-moz-range-thumb { width:16px; height:16px; border:0; border-radius:50%; background:var(--accent); }
 #book-name { letter-spacing:.12em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:45vw; }
-.paper { height:clamp(320px,calc(100svh - 156px),820px); background:var(--paper); box-shadow:0 2px 8px #706c5d0c; border:1px solid #dedbd1; }
+.paper { height:clamp(320px,calc(100svh - 156px),820px); background:var(--paper); box-shadow:0 2px 8px #706c5d0c; border:1px solid var(--line); }
 .title-page { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
 .title-types { display:flex; flex-direction:row-reverse; align-items:center; gap:36px; margin-bottom:36px; }
 .title-types h1 { writing-mode:vertical-rl; text-orientation:mixed; margin:0; font-weight:500; font-size:clamp(28px,4vw,40px); letter-spacing:.22em; line-height:1.6; outline:none; }
@@ -50,3 +61,10 @@ button:disabled { cursor:default; opacity:.35; }
   #reading-nav { padding-top:8px; }
 }
 @media(prefers-reduced-motion:no-preference) { .book-choice { transition:transform .15s; } }
+
+/* Reading colors are independent of the bookshelf illustration. Override these
+   six --yompub-* variables on :root to theme the host and embedded reader together. */
+body[data-reading-theme] { color-scheme:light; --ground:var(--yompub-paper-background,#fff); --paper:var(--yompub-paper-background,#fff); --ink:var(--yompub-paper-foreground,#000); --accent:var(--yompub-paper-accent,#0000ee); --muted:#555; --line:#bbb; }
+body[data-reading-theme="night"] { color-scheme:dark; --ground:var(--yompub-night-background,#000); --paper:var(--yompub-night-background,#000); --ink:var(--yompub-night-foreground,#fff); --accent:var(--yompub-night-accent,#6699ff); --muted:#aaa; --line:#666; }
+#book-view a { color:var(--accent); }
+@media(max-width:540px) { .book-bar { grid-template-columns:auto minmax(0,1fr) auto; gap:12px; } .book-actions { gap:12px; } #book-name { max-width:100%; } }
