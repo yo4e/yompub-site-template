@@ -434,6 +434,7 @@ function createReader(container, options = {}) {
   }
   function notify(state) {
     element.dispatchEvent(new win.CustomEvent("yompub-state", { bubbles: true, detail: { state, hasBook: current !== null, title: current?.book.metadata.title ?? null } }));
+    queuePosition();
   }
   function setBusy(busy) {
     get("cancel").hidden = !busy;
@@ -526,13 +527,15 @@ function createReader(container, options = {}) {
   }
   viewport.addEventListener("scroll", notifyPosition, { signal: events.signal });
   let positionFrame = 0;
-  const resize = new win.ResizeObserver(() => {
-    if (!positionFrame) positionFrame = win.requestAnimationFrame(() => {
+  function queuePosition() {
+    if (!destroyed && !positionFrame) positionFrame = win.requestAnimationFrame(() => {
       positionFrame = 0;
       notifyPosition();
     });
-  });
-  resize.observe(viewport);
+  }
+  const resize = new win.ResizeObserver(queuePosition);
+  resize.observe(element);
+  get("source-panel").addEventListener("toggle", queuePosition, { signal: events.signal });
   function navigate(id) {
     if (destroyed || !/^h-[1-9][0-9]*$/.test(id)) return false;
     const heading = root.getElementById(id);
