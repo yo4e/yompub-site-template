@@ -2,7 +2,7 @@
 
 This directory contains a tested browser bundle from [YomPUB](https://github.com/yo4e/YomPUB), including its parser Worker. It is a prototype snapshot, not a versioned npm release or a stable API commitment.
 
-`ORIGIN.json` records the source commit and SHA-256 hashes. The source commit is local and has not been pushed to the upstream repository. The published upstream main branch therefore may not reproduce this snapshot. Only source-map comments were removed for this distribution; executable code is unchanged. Source maps and development tooling are not included.
+`ORIGIN.json` records the source commit and SHA-256 hashes. The source commit is available in the upstream Git repository. Check out that exact commit, run `npm ci` and `npm run build`, then take `dist/reader.mjs` and `dist/parser-worker.mjs`. Only source-map comments were removed for this distribution; executable code is unchanged. Source maps and development tooling are not included.
 
 Both modules must be kept together and served over the same HTTP(S) origin. Update them as a pair after testing the bookshelf, all manuscripts, ruby, navigation, cancellation, and narrow layouts. Recalculate the recorded hashes after a bundle update.
 

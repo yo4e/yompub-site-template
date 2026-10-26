@@ -60,9 +60,28 @@ writing-mode: vertical-rl
 
 書棚の本 → 表紙の「ひらく」→ 本文。左右のスワイプ・スクロール、「次へ」「前へ」、左右の矢印キーで進めます。「表紙」で最初に戻り、「書棚へ」またはEscで本を閉じます。書棚に戻るとWorkerや本文DOMを破棄します。読込中の移動や連続切替でも、古い本の結果は新しい画面を上書きしません。
 
-本文は `vendor/yompub/reader.mjs` の `createReader` を使用し、Core parserと画像処理は隣のWorkerで行います。`chrome:'none'` により、管理・解析用の操作部を出さず、ホストの小さな操作だけで読みます。ホストはreaderの内部DOMを書き換えません。文字サイズは `site.mjs` のcreateReaderの `fontSize` で指定できます。
+本文は `vendor/yompub/reader.mjs` の `createReader` を使用し、Core parserと画像処理は隣のWorkerで行います。`chrome:'none'` により、管理・解析用の操作部を出さず、ホストの小さな操作だけで読みます。ホストはreaderの内部DOMを書き換えません。本文の右上にある「表示設定」から、文字サイズ（16〜32px）・行間（1.6〜2.4倍）・明朝/ゴシック・昼/夜を変更できます。昼は白地に黒文字、夜は黒地に白文字、リンクとアクセントは青です。設定を変えても読みかけの文章の位置を保ちます。再配置により進捗%が変わることはあります。
 
-`vendor/yompub/` は検証済みreaderのスナップショットです。実体のSHA-256と元のローカルコミットを [ORIGIN.json](vendor/yompub/ORIGIN.json) に記録しています。上流へ未pushの変更を含むため、公開中のYomPUB mainから同じファイルを再生成できるとは限りません。出典・更新時の注意は [vendor README](vendor/yompub/README.md)、検証範囲は [VALIDATION.md](VALIDATION.md) を参照してください。npm配布済みの安定APIではありません。
+設定は同じページで別の本へ移っても保持し、再読込すると既定（20px・行間2倍・明朝・昼）へ戻ります。Escは表示設定が開いているときは設定を閉じ、閉じているときは書棚へ戻ります。設定の矢印キー操作は本文移動と分離しています。
+
+埋め込みの色を変える場合は、`site.css` の末尾に以下のように指定します。ホストの読書画面とreaderへ同じ色を渡します。書棚の装丁・背景はそのままです。独自色は背景・本文・リンクのコントラストを確認してください。
+
+```css
+:root {
+  --yompub-paper-background: #fff;
+  --yompub-paper-foreground: #000;
+  --yompub-paper-accent: #0000ee;
+  --yompub-night-background: #000;
+  --yompub-night-foreground: #fff;
+  --yompub-night-accent: #6699ff;
+}
+```
+
+`vendor/yompub/` は検証済みreaderのスナップショットです。実体のSHA-256と元の上流コミットを [ORIGIN.json](vendor/yompub/ORIGIN.json) に記録しています。記録されたYomPUBコミットをビルドし、sourceMappingURLコメントだけを除いて同梱しています。出典・更新時の注意は [vendor README](vendor/yompub/README.md)、検証範囲は [VALIDATION.md](VALIDATION.md) を参照してください。npm配布済みの安定APIではありません。
+
+## 開発時の検証
+
+起動するだけなら依存のインストールは不要です。ヘッドレス回帰テストを実行する場合だけ `npm ci` → `npx playwright install chromium webkit` → `npm run check` → `npm run test:ui` を実行します。テストはlocalhostだけで配信し、PC・狭幅・WebKitで書棚、三冊の本文、設定、色、移動と中断を確認します。詳細は [VALIDATION.md](VALIDATION.md) を参照してください。
 
 ## 現在の制限
 

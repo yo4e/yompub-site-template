@@ -18,7 +18,15 @@
       <footer class="shelf-footer">ひとつの窓に、ひとつの物語。</footer>
     </section>
     <section id="book-view" aria-label="選んだ本" hidden>
-      <header class="book-bar"><button id="back" type="button">書棚へ</button><span id="book-name"></span><button id="show-cover" type="button" hidden>表紙</button></header>
+      <header class="book-bar"><button id="back" type="button">書棚へ</button><span id="book-name"></span><div class="book-actions"><button id="show-cover" type="button" hidden>表紙</button><details id="reading-settings" hidden>
+        <summary>表示設定</summary>
+        <div class="settings-panel" role="group" aria-label="読書の表示設定">
+          <label for="font-size">文字サイズ</label><span class="slider-control"><input id="font-size" type="range" min="16" max="32" step="1" value="20"><output id="font-value" for="font-size">20px</output></span>
+          <label for="line-height">行間</label><span class="slider-control"><input id="line-height" type="range" min="1.6" max="2.4" step="0.1" value="2"><output id="line-value" for="line-height">2倍</output></span>
+          <label for="font-family">書体</label><select id="font-family"><option value="mincho">明朝</option><option value="gothic">ゴシック</option></select>
+          <label for="theme">配色</label><select id="theme"><option value="paper">昼</option><option value="night">夜</option></select>
+        </div>
+      </details></div></header>
       <div class="paper">
         <div id="cover" class="title-page">
           <div class="title-types"><h1 id="cover-title" tabindex="-1"></h1><p id="cover-author"></p></div>

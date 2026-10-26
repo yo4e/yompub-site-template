@@ -121,7 +121,167 @@ function renderBook(book, { document: doc, resolveAsset }) {
 }
 
 // src/reader.css
-var reader_default = '/* Reader styles live only inside its shadow root; no document-wide selectors. */\n:host { display:block; width:100%; height:100%; min-width:0; min-height:0; container-type:inline-size; }\n* { box-sizing:border-box; }\n[hidden] { display:none!important; }\n.shell { all:initial; display:flex; flex-direction:column; width:100%; height:100%; min-height:0; min-width:0; overflow:hidden; direction:ltr; writing-mode:horizontal-tb; text-align:start; font:16px/1.5 system-ui,-apple-system,"Hiragino Sans",sans-serif; font-synthesis:none; color:#273e42; color-scheme:light; --paper:#fffdf7; --ink:#243d40; --line:#d3d9d0; --accent:#2a6c62; --font-size:20px; }\n.shell[data-theme="night"] { --paper:#192a2e; --ink:#e8e7db; --line:#42585a; --accent:#b4d6c2; }\nbutton,input,select { font:inherit; }\nbutton,select { border:1px solid #b7c5bd; border-radius:6px; background:#fffdf7; color:#254b43; padding:.5em .7em; }\nbutton { cursor:pointer; }\nbutton:hover { background:#e8eee5; }\nbutton:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible,#viewport:focus-visible { outline:3px solid #be7a2e; outline-offset:-3px; }\n.load-state { flex:none; display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:12px; min-height:36px; }\n.load-state p { margin:6px 0; }\n#error { flex:none; margin:4px 0; max-height:80px; overflow:auto; padding:8px; border-inline-start:3px solid #a8472d; background:#fae6dd; color:#7d301e; white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; }\n#reader { flex:1; min-height:0; min-width:0; display:flex; flex-direction:column; gap:12px; }\n.reader-top { flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }\n#book-title { font-family:Georgia,"Yu Mincho",serif; font-size:24px; font-weight:500; margin:0; }\n#book-author { font-size:12px; color:#61726a; margin:0; }\n#mode-label { margin:0; font-size:10px; letter-spacing:.1em; color:#5b776c; }\n.controls { display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:12px; }\n.controls label { display:flex; align-items:center; gap:6px; }\n.controls input { width:85px; accent-color:var(--accent); }\n.reading-layout { flex:1; min-height:0; min-width:0; display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--paper); }\n#toc { flex:0 0 170px; min-height:0; overflow:auto; padding:20px 12px; border-inline-end:1px solid var(--line); font-size:12px; }\n#toc ol { list-style:none; padding:0; margin:0; }\n#toc li { margin:0 0 12px; }\n#toc a { display:block; color:var(--accent); line-height:1.7; text-underline-offset:3px; }\n#viewport { flex:1; min-width:0; min-height:0; overflow:auto; padding:24px 32px; color:var(--ink); scrollbar-gutter:stable; }\n#viewport:has(.book[data-mode="vertical-rl"]) { direction:rtl; }\n.book {\n  font-family:"Yu Mincho","Hiragino Mincho ProN",Georgia,serif;\n  font-size:var(--font-size);\n  line-height:1.9;\n  overflow-wrap:anywhere;\n}\n.book:lang(ja) {\n  /* Prefer Japanese fonts with vertical metrics before generic CJK fallback. */\n  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP","Noto Serif JP","IPAexMincho","IPAMincho","Noto Sans CJK JP","Noto Sans JP","IPAGothic",serif;\n}\n.book[data-mode="horizontal-tb"] {\n  max-width:36em;\n  margin-inline:auto;\n}\n.book:not([data-mode="horizontal-tb"]) {\n  height:100%;\n  min-height:0;\n  max-width:none;\n  margin:0;\n  padding-inline:12px;\n}\n.book h1,.book h2,.book h3,.book h4,.book h5,.book h6 {\n  font-weight:600;\n  line-height:1.7;\n  scroll-margin:12px;\n}\n.book h1 {\n  font-size:1.5em;\n}\n.book h2 {\n  font-size:1.2em;\n}\n.book p {\n  margin-block:1.3em;\n}\n.book p:first-child {\n  margin-block-start:0;\n}\n.book a {\n  color:var(--accent);\n  text-underline-offset:.2em;\n}\n.book img {\n  display:inline-block;\n  max-width:min(100%,480px);\n  max-height:100%;\n  object-fit:contain;\n  vertical-align:middle;\n}\n.book:not([data-mode="horizontal-tb"]) img {\n  max-width:300px;\n  max-height:100%;\n  width:auto;\n  height:auto;\n}\n.cover {\n  margin-block-end:2em;\n  display:flex;\n  align-items:center;\n  justify-content:center;\n}\n.cover img {\n  max-height:100%;\n}\n.book blockquote {\n  border-inline-start:2px solid #9eb3a3;\n  padding-inline-start:1em;\n  margin-inline:0;\n  color:#61756a;\n}\n.book ruby {\n  ruby-position:over;\n}\n.book rt {\n  font-size:.5em;\n}\n.book pre {\n  white-space:pre-wrap;\n}\n.book code {\n  font-size:.85em;\n  font-family:ui-monospace,monospace;\n}\n.book hr {\n  border:0;\n  border-block-start:1px solid var(--line);\n  margin-block:2em;\n}\n.book bdi {\n  unicode-bidi:isolate;\n}\n\n.book[dir="rtl"] { font-family:"Geeza Pro",Tahoma,serif; }\n#source-panel { flex:none; max-height:38%; overflow:auto; font-size:12px; }\nsummary { cursor:pointer; }\n.hint { color:#697a72; }\n.source-actions { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }\n#source { padding:12px; background:var(--paper); color:var(--ink); white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.8; unicode-bidi:plaintext; }\n#warnings { white-space:pre-wrap; color:#8b592a; }\n.shell[data-chrome="none"] .load-state,\n.shell[data-chrome="none"] .reader-top,\n.shell[data-chrome="none"] #toc,\n.shell[data-chrome="none"] #source-panel { display:none; }\n.shell[data-chrome="none"] .reading-layout { border:0; border-radius:0; }\n.shell[data-chrome="none"] #viewport { padding:40px; overscroll-behavior-x:contain; }\n.shell[data-chrome="none"] .book { line-height:2; }\n.shell[data-chrome="none"] .book h1:first-child { margin-block-start:0; }\n@container (max-width:540px) {\n  .reading-layout { flex-direction:column; }\n  #toc { flex:0 0 auto; max-height:88px; border-inline-end:0; border-bottom:1px solid var(--line); padding:10px; }\n  #toc ol { display:flex; gap:16px; }\n  #toc li { min-width:110px; margin:0; }\n  #viewport { padding:16px; }\n  .book:not([data-mode="horizontal-tb"]) img { max-width:230px; }\n  .controls { gap:8px; }\n  .shell[data-chrome="none"] #viewport { padding:24px 20px; }\n}\n';
+var reader_default = `/* Reader styles live only inside its shadow root; no document-wide selectors. */
+:host { display:block; width:100%; height:100%; min-width:0; min-height:0; container-type:inline-size; }
+* { box-sizing:border-box; }
+[hidden] { display:none!important; }
+.shell { all:initial; display:flex; flex-direction:column; width:100%; height:100%; min-height:0; min-width:0; overflow:hidden; direction:ltr; writing-mode:horizontal-tb; text-align:start; font:16px/1.5 system-ui,-apple-system,"Hiragino Sans",sans-serif; font-synthesis:none; color:var(--ink); color-scheme:light; background:var(--paper); --paper:var(--yompub-paper-background,#fff); --ink:var(--yompub-paper-foreground,#000); --line:#ccc; --muted:#555; --hover:#f2f2f2; --accent:var(--yompub-paper-accent,#0000ee); --font-size:20px; --line-height:1.9; }
+.shell[data-theme="night"] { color-scheme:dark; --paper:var(--yompub-night-background,#000); --ink:var(--yompub-night-foreground,#fff); --line:#666; --muted:#ccc; --hover:#1a1a1a; --accent:var(--yompub-night-accent,#6699ff); }
+button,input,select { font:inherit; }
+button,select { border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); padding:.5em .7em; }
+button { cursor:pointer; }
+button:hover { background:var(--hover); }
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible,#viewport:focus-visible { outline:3px solid var(--accent); outline-offset:-3px; }
+.load-state { flex:none; display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:12px; min-height:36px; }
+.load-state p { margin:6px 0; }
+#error { flex:none; margin:4px 0; max-height:80px; overflow:auto; padding:8px; border-inline-start:3px solid var(--ink); background:var(--paper); color:var(--ink); white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; }
+#reader { flex:1; min-height:0; min-width:0; display:flex; flex-direction:column; gap:12px; }
+.reader-top { position:relative; flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.book-info { flex:1 1 160px; min-width:0; overflow-wrap:anywhere; }
+.reader-actions { display:flex; align-items:center; gap:16px; margin-inline-start:auto; font-size:12px; }
+#reading-settings summary { padding:10px 0; white-space:nowrap; color:var(--accent); }
+#book-title { font-family:Georgia,"Yu Mincho",serif; font-size:24px; font-weight:500; margin:0; }
+#book-author { font-size:12px; color:var(--muted); margin:0; }
+#mode-label { margin:0; font-size:10px; letter-spacing:.1em; color:var(--muted); }
+.controls { position:absolute; top:calc(100% + 8px); right:0; z-index:2; width:min(320px,100%); display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:16px 12px; padding:20px; border:1px solid var(--line); background:var(--paper); box-shadow:0 4px 16px #0002; font-size:13px; }
+.controls label { white-space:nowrap; }
+.controls select { width:100%; min-width:0; padding:6px; border-radius:3px; }
+.slider-control { display:flex; align-items:center; gap:10px; min-width:0; }
+.controls input { min-width:0; width:100%; height:24px; margin:0; appearance:none; background:transparent; accent-color:var(--accent); cursor:pointer; }
+/* Keep the native range semantics, with visible tracks and blue thumbs even
+   in WebKit, where accent-color does not recolor the native range control. */
+.controls input::-webkit-slider-runnable-track { height:4px; border-radius:2px; background:var(--line); }
+.controls input::-webkit-slider-thumb { appearance:none; width:16px; height:16px; margin-top:-6px; border:0; border-radius:50%; background:var(--accent); }
+.controls input::-moz-range-track { height:4px; border-radius:2px; background:var(--line); }
+.controls input::-moz-range-thumb { width:16px; height:16px; border:0; border-radius:50%; background:var(--accent); }
+.controls output { min-width:3.5em; text-align:right; font-variant-numeric:tabular-nums; }
+.reading-layout { flex:1; min-height:0; min-width:0; display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--paper); }
+#toc { flex:0 0 170px; min-height:0; overflow:auto; padding:20px 12px; border-inline-end:1px solid var(--line); font-size:12px; }
+#toc ol { list-style:none; padding:0; margin:0; }
+#toc li { margin:0 0 12px; }
+#toc a { display:block; color:var(--accent); line-height:1.7; text-underline-offset:3px; }
+#viewport { flex:1; min-width:0; min-height:0; overflow:auto; overflow-anchor:none; padding:24px 32px; color:var(--ink); scrollbar-gutter:stable; }
+#viewport:has(.book[data-mode="vertical-rl"]) { direction:rtl; }
+/* A reserved vertical scrollbar gutter shifts Chromium's horizontal scroll
+   origin by its width; vertical books use the horizontal scrollbar instead. */
+#viewport:has(.book:not([data-mode="horizontal-tb"])) { scrollbar-gutter:auto; }
+.book {
+  font-family:"Yu Mincho","Hiragino Mincho ProN",Georgia,serif;
+  font-size:var(--font-size);
+  line-height:var(--line-height);
+  overflow-wrap:anywhere;
+}
+.book:lang(ja) {
+  /* Prefer Japanese fonts with vertical metrics before generic CJK fallback. */
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP","Noto Serif JP","IPAexMincho","IPAMincho","Noto Sans CJK JP","Noto Sans JP","IPAGothic",serif;
+}
+.shell[data-font-family="gothic"] .book { font-family:"Yu Gothic","Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP","Noto Sans JP","IPAexGothic","IPAGothic",sans-serif; }
+.book[data-mode="horizontal-tb"] {
+  max-width:36em;
+  margin-inline:auto;
+}
+.book:not([data-mode="horizontal-tb"]) {
+  height:100%;
+  min-height:0;
+  max-width:none;
+  margin:0;
+  padding-inline:12px;
+}
+.book h1,.book h2,.book h3,.book h4,.book h5,.book h6 {
+  font-weight:600;
+  line-height:1.7;
+  scroll-margin:12px;
+}
+.book h1 {
+  font-size:1.5em;
+}
+.book h2 {
+  font-size:1.2em;
+}
+.book p {
+  margin-block:1.3em;
+}
+.book p:first-child {
+  margin-block-start:0;
+}
+.book a {
+  color:var(--accent);
+  text-underline-offset:.2em;
+}
+.book img {
+  display:inline-block;
+  max-width:min(100%,480px);
+  max-height:100%;
+  object-fit:contain;
+  vertical-align:middle;
+}
+.book:not([data-mode="horizontal-tb"]) img {
+  max-width:300px;
+  max-height:100%;
+  width:auto;
+  height:auto;
+}
+.cover {
+  margin-block-end:2em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cover img {
+  max-height:100%;
+}
+.book blockquote {
+  border-inline-start:2px solid var(--line);
+  padding-inline-start:1em;
+  margin-inline:0;
+  color:inherit;
+}
+.book ruby {
+  ruby-position:over;
+}
+.book rt {
+  font-size:.5em;
+}
+.book pre {
+  white-space:pre-wrap;
+}
+.book code {
+  font-size:.85em;
+  font-family:ui-monospace,monospace;
+}
+.book hr {
+  border:0;
+  border-block-start:1px solid var(--line);
+  margin-block:2em;
+}
+.book bdi {
+  unicode-bidi:isolate;
+}
+
+.book[dir="rtl"] { font-family:"Geeza Pro",Tahoma,serif; }
+#source-panel { flex:none; max-height:38%; overflow:auto; font-size:12px; }
+summary { cursor:pointer; }
+.hint { color:var(--muted); }
+.source-actions { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
+#source { padding:12px; background:var(--paper); color:var(--ink); white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.8; unicode-bidi:plaintext; }
+#warnings { white-space:pre-wrap; color:var(--ink); }
+.shell[data-chrome="none"] .load-state,
+.shell[data-chrome="none"] .reader-top,
+.shell[data-chrome="none"] #toc,
+.shell[data-chrome="none"] #source-panel { display:none; }
+.shell[data-chrome="none"] .reading-layout { border:0; border-radius:0; }
+.shell[data-chrome="none"] #viewport { padding:40px; overscroll-behavior-x:contain; }
+.shell[data-chrome="none"] .book h1:first-child { margin-block-start:0; }
+@container (max-width:540px) {
+  .reading-layout { flex-direction:column; }
+  #toc { flex:0 0 auto; max-height:88px; border-inline-end:0; border-bottom:1px solid var(--line); padding:10px; }
+  #toc ol { display:flex; gap:16px; }
+  #toc li { min-width:110px; margin:0; }
+  #viewport { padding:16px; }
+  .book:not([data-mode="horizontal-tb"]) img { max-width:230px; }
+  .shell[data-chrome="none"] #viewport { padding:24px 20px; }
+}
+`;
 
 // src/reader-ui.mjs
 var markup = `
@@ -129,11 +289,85 @@ var markup = `
   <div class="load-state"><p id="status" role="status" aria-live="polite">\u672C\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002</p><button id="cancel" type="button" hidden>\u8AAD\u307F\u8FBC\u307F\u3092\u4E2D\u65AD</button></div>
   <p id="error" role="alert" hidden></p>
   <section id="reader" hidden aria-label="\u672C\u306E\u30D3\u30E5\u30FC\u30A2">
-    <div class="reader-top"><div><p id="mode-label"></p><h2 id="book-title"></h2><p id="book-author"></p></div><div class="controls"><label>\u6587\u5B57\u30B5\u30A4\u30BA <input id="font-size" type="range" min="16" max="32" value="20"><output id="font-value">20</output></label><label>\u914D\u8272 <select id="theme"><option value="paper">\u7D19</option><option value="night">\u591C</option></select></label><button id="close-book" type="button">\u672C\u3092\u9589\u3058\u308B</button></div></div>
+    <div class="reader-top"><div class="book-info"><p id="mode-label"></p><h2 id="book-title"></h2><p id="book-author"></p></div><div class="reader-actions">
+      <button id="close-book" type="button">\u672C\u3092\u9589\u3058\u308B</button>
+      <details id="reading-settings"><summary>\u8868\u793A\u8A2D\u5B9A</summary><div class="controls" role="group" aria-label="\u8AAD\u66F8\u306E\u8868\u793A\u8A2D\u5B9A">
+      <label for="font-size">\u6587\u5B57\u30B5\u30A4\u30BA</label><span class="slider-control"><input id="font-size" type="range" min="16" max="32" step="1" value="20"><output id="font-value" for="font-size">20px</output></span>
+      <label for="line-height">\u884C\u9593</label><span class="slider-control"><input id="line-height" type="range" min="1.6" max="2.4" step="0.1" value="1.9"><output id="line-value" for="line-height">1.9\u500D</output></span>
+      <label for="font-family">\u66F8\u4F53</label><select id="font-family"><option value="mincho">\u660E\u671D</option><option value="gothic">\u30B4\u30B7\u30C3\u30AF</option></select>
+      <label for="theme">\u914D\u8272</label><select id="theme"><option value="paper">\u663C</option><option value="night">\u591C</option></select>
+      </div></details>
+    </div></div>
     <div class="reading-layout"><nav id="toc" aria-label="\u76EE\u6B21"></nav><div id="viewport" tabindex="0" role="region" aria-label="\u672C\u6587\u3002\u7E26\u66F8\u304D\u3067\u306F\u5DE6\u53F3\u306B\u30B9\u30AF\u30ED\u30FC\u30EB\u3067\u304D\u307E\u3059\u3002"></div></div>
     <details id="source-panel"><summary>\u539F\u7A3F\u3068\u89E3\u6790\u7D50\u679C\u3092\u78BA\u8A8D</summary><p class="hint">\u7DE8\u96C6\u306F\u30C6\u30AD\u30B9\u30C8\u30A8\u30C7\u30A3\u30BF\u3067\u884C\u3044\u3001\u4FDD\u5B58\u3057\u305F\u539F\u7A3F\u3092\u958B\u304D\u76F4\u3057\u3066\u304F\u3060\u3055\u3044\u3002</p><div class="source-actions"><button id="download-source" type="button">\u539F\u7A3F\u3092\u4FDD\u5B58</button><button id="download-ast" type="button">\u610F\u5473\u30E2\u30C7\u30EB\uFF08JSON\uFF09\u3092\u4FDD\u5B58</button></div><pre id="source" tabindex="0" dir="auto"></pre><pre id="warnings"></pre></details>
   </section>
 </div>`;
+
+// src/reader-position.mjs
+function captureReadingAnchor(viewport, mode) {
+  const doc = viewport.ownerDocument, win = doc.defaultView;
+  if (!win || !viewport.firstElementChild) return null;
+  const vertical = mode !== "horizontal-tb", reverse = mode === "vertical-rl";
+  const extent = () => Math.max(0, vertical ? viewport.scrollWidth - viewport.clientWidth : viewport.scrollHeight - viewport.clientHeight);
+  const offset = vertical ? Math.abs(viewport.scrollLeft) : viewport.scrollTop;
+  const progress = extent() ? offset / extent() : 0;
+  const atStart = offset <= 1, atEnd = !atStart && offset >= extent() - 1;
+  const css = win.getComputedStyle(viewport);
+  const box = viewport.getBoundingClientRect();
+  const bounds = {
+    left: box.left + viewport.clientLeft + parseFloat(css.paddingLeft),
+    right: box.left + viewport.clientLeft + viewport.clientWidth - parseFloat(css.paddingRight),
+    top: box.top + viewport.clientTop + parseFloat(css.paddingTop),
+    bottom: box.top + viewport.clientTop + viewport.clientHeight - parseFloat(css.paddingBottom)
+  };
+  const edge = (rect) => vertical ? reverse ? -rect.right : rect.left : rect.top;
+  const boundary = vertical ? reverse ? -bounds.right : bounds.left : bounds.top;
+  let anchor = null;
+  let distance = 0;
+  if (!atStart && !atEnd) {
+    const nodes = doc.createTreeWalker(viewport.firstElementChild, win.NodeFilter.SHOW_TEXT);
+    while (nodes.nextNode()) {
+      const node = (
+        /** @type {Text} */
+        nodes.currentNode
+      );
+      if (!node.data.trim() || node.parentElement?.closest("rt,rp")) continue;
+      const range = doc.createRange();
+      range.selectNodeContents(node);
+      const rect = range.getBoundingClientRect();
+      if (rect.right <= bounds.left || rect.left >= bounds.right || rect.bottom <= bounds.top || rect.top >= bounds.bottom) continue;
+      let low = 0, high = node.length;
+      while (low < high) {
+        const mid = Math.floor((low + high) / 2);
+        range.setStart(node, mid);
+        range.setEnd(node, mid + 1);
+        if (edge(range.getBoundingClientRect()) < boundary - 1) low = mid + 1;
+        else high = mid;
+      }
+      if (low === node.length) continue;
+      range.setStart(node, low);
+      range.setEnd(node, low + 1);
+      const char = range.getBoundingClientRect();
+      if (!char.width || !char.height || char.right <= bounds.left || char.left >= bounds.right || char.bottom <= bounds.top || char.top >= bounds.bottom) continue;
+      anchor = range;
+      distance = edge(char) - boundary;
+      break;
+    }
+  }
+  return () => {
+    const newExtent = extent();
+    let next = atStart ? 0 : atEnd ? newExtent : progress * newExtent;
+    if (anchor?.startContainer.isConnected) {
+      const frame = viewport.getBoundingClientRect();
+      const style = win.getComputedStyle(viewport);
+      const leading = vertical ? reverse ? -(frame.left + viewport.clientLeft + viewport.clientWidth - parseFloat(style.paddingRight)) : frame.left + viewport.clientLeft + parseFloat(style.paddingLeft) : frame.top + viewport.clientTop + parseFloat(style.paddingTop);
+      const current = vertical ? Math.abs(viewport.scrollLeft) : viewport.scrollTop;
+      next = current + edge(anchor.getBoundingClientRect()) - leading - distance;
+    }
+    if (vertical) viewport.scrollTo({ left: (reverse ? -1 : 1) * next, behavior: "instant" });
+    else viewport.scrollTo({ top: next, behavior: "instant" });
+  };
+}
 
 // src/reader.mjs
 function createReader(container, options = {}) {
@@ -142,6 +376,8 @@ function createReader(container, options = {}) {
   const win = doc.defaultView;
   function validateOptions(value) {
     if (value.fontSize !== void 0 && (!Number.isFinite(value.fontSize) || value.fontSize < 16 || value.fontSize > 32)) throw new RangeError("fontSize must be between 16 and 32.");
+    if (value.lineHeight !== void 0 && (!Number.isFinite(value.lineHeight) || value.lineHeight < 1.6 || value.lineHeight > 2.4)) throw new RangeError("lineHeight must be between 1.6 and 2.4.");
+    if (value.fontFamily !== void 0 && !["mincho", "gothic"].includes(value.fontFamily)) throw new RangeError("fontFamily must be mincho or gothic.");
     if (value.theme !== void 0 && !["paper", "night"].includes(value.theme)) throw new RangeError("theme must be paper or night.");
     if (value.chrome !== void 0 && !["full", "none"].includes(value.chrome)) throw new RangeError("chrome must be full or none.");
   }
@@ -170,13 +406,26 @@ function createReader(container, options = {}) {
     /** @type {HTMLInputElement} */
     get("font-size")
   );
+  const lineHeight = (
+    /** @type {HTMLInputElement} */
+    get("line-height")
+  );
+  const fontFamily = (
+    /** @type {HTMLSelectElement} */
+    get("font-family")
+  );
   const theme = (
     /** @type {HTMLSelectElement} */
     get("theme")
   );
+  const settings = (
+    /** @type {HTMLDetailsElement} */
+    get("reading-settings")
+  );
   const events = new AbortController();
   let active = null;
   let current = null;
+  let readingAnchor = null;
   let destroyed = false;
   let operation = 0;
   const downloads = /* @__PURE__ */ new Map();
@@ -192,6 +441,7 @@ function createReader(container, options = {}) {
   }
   function notify(state) {
     element.dispatchEvent(new win.CustomEvent("yompub-state", { bubbles: true, detail: { state, hasBook: current !== null, title: current?.book.metadata.title ?? null } }));
+    queuePosition();
   }
   function setBusy(busy) {
     get("cancel").hidden = !busy;
@@ -230,18 +480,42 @@ function createReader(container, options = {}) {
   function setOptions(value) {
     if (destroyed) throw new Error("Reader is destroyed.");
     validateOptions(value);
+    const reflows = value.fontSize !== void 0 || value.lineHeight !== void 0 || value.fontFamily !== void 0 || value.chrome !== void 0;
+    if (current && reflows && (!readingAnchor || readingAnchor.book !== current || readingAnchor.left !== viewport.scrollLeft || readingAnchor.top !== viewport.scrollTop || readingAnchor.width !== viewport.clientWidth || readingAnchor.height !== viewport.clientHeight)) {
+      readingAnchor = { book: current, left: viewport.scrollLeft, top: viewport.scrollTop, width: viewport.clientWidth, height: viewport.clientHeight, restore: captureReadingAnchor(viewport, current.book.metadata.writingMode) };
+    }
     if (value.fontSize !== void 0) {
       shell.style.setProperty("--font-size", `${value.fontSize}px`);
       font.value = String(value.fontSize);
-      get("font-value").textContent = font.value;
+      get("font-value").textContent = `${value.fontSize}px`;
+      font.setAttribute("aria-valuetext", `${value.fontSize}\u30D4\u30AF\u30BB\u30EB`);
+    }
+    if (value.lineHeight !== void 0) {
+      shell.style.setProperty("--line-height", String(value.lineHeight));
+      lineHeight.value = String(value.lineHeight);
+      get("line-value").textContent = `${value.lineHeight}\u500D`;
+      lineHeight.setAttribute("aria-valuetext", `${value.lineHeight}\u500D`);
+    }
+    if (value.fontFamily !== void 0) {
+      shell.dataset.fontFamily = value.fontFamily;
+      fontFamily.value = value.fontFamily;
     }
     if (value.theme !== void 0) {
       shell.dataset.theme = value.theme;
+      element.dataset.yompubTheme = value.theme;
       theme.value = value.theme;
     }
-    if (value.chrome !== void 0) shell.dataset.chrome = value.chrome;
+    if (value.chrome !== void 0) {
+      shell.dataset.chrome = value.chrome;
+      if (value.chrome === "none") settings.open = false;
+    }
+    if (current && reflows && readingAnchor) {
+      readingAnchor.restore?.();
+      Object.assign(readingAnchor, { left: viewport.scrollLeft, top: viewport.scrollTop, width: viewport.clientWidth, height: viewport.clientHeight });
+    }
+    if (current) notifyPosition();
   }
-  setOptions({ fontSize: 20, theme: "paper", chrome: "full", ...options });
+  setOptions({ fontSize: 20, lineHeight: options.chrome === "none" ? 2 : 1.9, fontFamily: "mincho", theme: "paper", chrome: "full", ...options });
   function getPosition() {
     if (destroyed || !current) return null;
     const vertical = current.book.metadata.writingMode !== "horizontal-tb";
@@ -262,8 +536,16 @@ function createReader(container, options = {}) {
     return true;
   }
   viewport.addEventListener("scroll", notifyPosition, { signal: events.signal });
-  const resize = new win.ResizeObserver(notifyPosition);
-  resize.observe(viewport);
+  let positionFrame = 0;
+  function queuePosition() {
+    if (!destroyed && !positionFrame) positionFrame = win.requestAnimationFrame(() => {
+      positionFrame = 0;
+      notifyPosition();
+    });
+  }
+  const resize = new win.ResizeObserver(queuePosition);
+  resize.observe(element);
+  get("source-panel").addEventListener("toggle", queuePosition, { signal: events.signal });
   function navigate(id) {
     if (destroyed || !/^h-[1-9][0-9]*$/.test(id)) return false;
     const heading = root.getElementById(id);
@@ -307,6 +589,7 @@ function createReader(container, options = {}) {
           await Promise.all([...article.querySelectorAll("img")].map((img) => img.decode()));
           if (!isActive(job)) return;
           if (current) revoke(current.urls);
+          readingAnchor = null;
           current = { book: result.book, source: result.source, warnings: result.warnings, urls: job.urls };
           job.urls = [];
           const metadata = result.book.metadata, title = get("book-title");
@@ -330,6 +613,7 @@ function createReader(container, options = {}) {
           get("toc").replaceChildren(list);
           get("source").textContent = result.source;
           get("warnings").textContent = result.warnings.map((w) => `${w.code}: ${w.message}`).join("\n");
+          settings.open = false;
           reader.hidden = false;
           viewport.scrollTop = 0;
           viewport.scrollLeft = 0;
@@ -381,11 +665,13 @@ function createReader(container, options = {}) {
     if (destroyed || revision !== operation) return;
     if (current) revoke(current.urls);
     current = null;
+    readingAnchor = null;
     clearDownloads();
     viewport.replaceChildren();
     get("toc").replaceChildren();
     get("source").textContent = "";
     get("warnings").textContent = "";
+    settings.open = false;
     reader.hidden = true;
     errorBox.hidden = true;
     setBusy(false);
@@ -400,9 +686,12 @@ function createReader(container, options = {}) {
     stop("destroyed");
     if (current) revoke(current.urls);
     current = null;
+    readingAnchor = null;
     clearDownloads();
     events.abort();
     resize.disconnect();
+    win.cancelAnimationFrame(positionFrame);
+    positionFrame = 0;
     viewport.replaceChildren();
     reader.replaceChildren();
     root.replaceChildren();
@@ -424,7 +713,20 @@ function createReader(container, options = {}) {
   }
   get("cancel").addEventListener("click", cancel, { signal: events.signal });
   get("close-book").addEventListener("click", close, { signal: events.signal });
+  settings.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && settings.open) {
+      event.preventDefault();
+      event.stopPropagation();
+      settings.open = false;
+      settings.querySelector("summary")?.focus({ preventScroll: true });
+    }
+  }, { signal: events.signal });
   font.addEventListener("input", () => setOptions({ fontSize: Number(font.value) }), { signal: events.signal });
+  lineHeight.addEventListener("input", () => setOptions({ lineHeight: Number(lineHeight.value) }), { signal: events.signal });
+  fontFamily.addEventListener("change", () => setOptions({ fontFamily: (
+    /** @type {'mincho'|'gothic'} */
+    fontFamily.value
+  ) }), { signal: events.signal });
   theme.addEventListener("change", () => setOptions({ theme: (
     /** @type {'paper'|'night'} */
     theme.value
