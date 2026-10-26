@@ -136,22 +136,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,s
 .load-state p { margin:6px 0; }
 #error { flex:none; margin:4px 0; max-height:80px; overflow:auto; padding:8px; border-inline-start:3px solid var(--ink); background:var(--paper); color:var(--ink); white-space:pre-wrap; overflow-wrap:anywhere; font-size:13px; }
 #reader { flex:1; min-height:0; min-width:0; display:flex; flex-direction:column; gap:12px; }
-.reader-top { flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.reader-top { position:relative; flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.book-info { flex:1 1 160px; min-width:0; overflow-wrap:anywhere; }
+.reader-actions { display:flex; align-items:center; gap:16px; margin-inline-start:auto; font-size:12px; }
+#reading-settings summary { padding:10px 0; white-space:nowrap; color:var(--accent); }
 #book-title { font-family:Georgia,"Yu Mincho",serif; font-size:24px; font-weight:500; margin:0; }
 #book-author { font-size:12px; color:var(--muted); margin:0; }
 #mode-label { margin:0; font-size:10px; letter-spacing:.1em; color:var(--muted); }
-.controls { display:grid; grid-template-columns:auto auto auto auto; align-items:center; gap:8px 10px; font-size:12px; }
+.controls { position:absolute; top:calc(100% + 8px); right:0; z-index:2; width:min(320px,100%); display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:16px 12px; padding:20px; border:1px solid var(--line); background:var(--paper); box-shadow:0 4px 16px #0002; font-size:13px; }
 .controls label { white-space:nowrap; }
-.slider-control { display:flex; align-items:center; gap:6px; }
-.controls input { width:85px; height:20px; margin:0; appearance:none; background:transparent; accent-color:var(--accent); cursor:pointer; }
+.controls select { width:100%; min-width:0; padding:6px; border-radius:3px; }
+.slider-control { display:flex; align-items:center; gap:10px; min-width:0; }
+.controls input { min-width:0; width:100%; height:24px; margin:0; appearance:none; background:transparent; accent-color:var(--accent); cursor:pointer; }
 /* Keep the native range semantics, with visible tracks and blue thumbs even
    in WebKit, where accent-color does not recolor the native range control. */
 .controls input::-webkit-slider-runnable-track { height:4px; border-radius:2px; background:var(--line); }
 .controls input::-webkit-slider-thumb { appearance:none; width:16px; height:16px; margin-top:-6px; border:0; border-radius:50%; background:var(--accent); }
 .controls input::-moz-range-track { height:4px; border-radius:2px; background:var(--line); }
 .controls input::-moz-range-thumb { width:16px; height:16px; border:0; border-radius:50%; background:var(--accent); }
-.controls output { min-width:3.5em; font-variant-numeric:tabular-nums; }
-#close-book { grid-column:3 / 5; }
+.controls output { min-width:3.5em; text-align:right; font-variant-numeric:tabular-nums; }
 .reading-layout { flex:1; min-height:0; min-width:0; display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--paper); }
 #toc { flex:0 0 170px; min-height:0; overflow:auto; padding:20px 12px; border-inline-end:1px solid var(--line); font-size:12px; }
 #toc ol { list-style:none; padding:0; margin:0; }
@@ -276,8 +279,6 @@ summary { cursor:pointer; }
   #toc li { min-width:110px; margin:0; }
   #viewport { padding:16px; }
   .book:not([data-mode="horizontal-tb"]) img { max-width:230px; }
-  .controls { gap:6px 8px; }
-  .controls input { width:46px; }
   .shell[data-chrome="none"] #viewport { padding:24px 20px; }
 }
 `;
@@ -288,12 +289,14 @@ var markup = `
   <div class="load-state"><p id="status" role="status" aria-live="polite">\u672C\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002</p><button id="cancel" type="button" hidden>\u8AAD\u307F\u8FBC\u307F\u3092\u4E2D\u65AD</button></div>
   <p id="error" role="alert" hidden></p>
   <section id="reader" hidden aria-label="\u672C\u306E\u30D3\u30E5\u30FC\u30A2">
-    <div class="reader-top"><div><p id="mode-label"></p><h2 id="book-title"></h2><p id="book-author"></p></div><div class="controls" role="group" aria-label="\u8868\u793A\u8A2D\u5B9A">
+    <div class="reader-top"><div class="book-info"><p id="mode-label"></p><h2 id="book-title"></h2><p id="book-author"></p></div><div class="reader-actions">
+      <button id="close-book" type="button">\u672C\u3092\u9589\u3058\u308B</button>
+      <details id="reading-settings"><summary>\u8868\u793A\u8A2D\u5B9A</summary><div class="controls" role="group" aria-label="\u8AAD\u66F8\u306E\u8868\u793A\u8A2D\u5B9A">
       <label for="font-size">\u6587\u5B57\u30B5\u30A4\u30BA</label><span class="slider-control"><input id="font-size" type="range" min="16" max="32" step="1" value="20"><output id="font-value" for="font-size">20px</output></span>
       <label for="line-height">\u884C\u9593</label><span class="slider-control"><input id="line-height" type="range" min="1.6" max="2.4" step="0.1" value="1.9"><output id="line-value" for="line-height">1.9\u500D</output></span>
       <label for="font-family">\u66F8\u4F53</label><select id="font-family"><option value="mincho">\u660E\u671D</option><option value="gothic">\u30B4\u30B7\u30C3\u30AF</option></select>
       <label for="theme">\u914D\u8272</label><select id="theme"><option value="paper">\u663C</option><option value="night">\u591C</option></select>
-      <button id="close-book" type="button">\u672C\u3092\u9589\u3058\u308B</button>
+      </div></details>
     </div></div>
     <div class="reading-layout"><nav id="toc" aria-label="\u76EE\u6B21"></nav><div id="viewport" tabindex="0" role="region" aria-label="\u672C\u6587\u3002\u7E26\u66F8\u304D\u3067\u306F\u5DE6\u53F3\u306B\u30B9\u30AF\u30ED\u30FC\u30EB\u3067\u304D\u307E\u3059\u3002"></div></div>
     <details id="source-panel"><summary>\u539F\u7A3F\u3068\u89E3\u6790\u7D50\u679C\u3092\u78BA\u8A8D</summary><p class="hint">\u7DE8\u96C6\u306F\u30C6\u30AD\u30B9\u30C8\u30A8\u30C7\u30A3\u30BF\u3067\u884C\u3044\u3001\u4FDD\u5B58\u3057\u305F\u539F\u7A3F\u3092\u958B\u304D\u76F4\u3057\u3066\u304F\u3060\u3055\u3044\u3002</p><div class="source-actions"><button id="download-source" type="button">\u539F\u7A3F\u3092\u4FDD\u5B58</button><button id="download-ast" type="button">\u610F\u5473\u30E2\u30C7\u30EB\uFF08JSON\uFF09\u3092\u4FDD\u5B58</button></div><pre id="source" tabindex="0" dir="auto"></pre><pre id="warnings"></pre></details>
@@ -415,6 +418,10 @@ function createReader(container, options = {}) {
     /** @type {HTMLSelectElement} */
     get("theme")
   );
+  const settings = (
+    /** @type {HTMLDetailsElement} */
+    get("reading-settings")
+  );
   const events = new AbortController();
   let active = null;
   let current = null;
@@ -498,7 +505,10 @@ function createReader(container, options = {}) {
       element.dataset.yompubTheme = value.theme;
       theme.value = value.theme;
     }
-    if (value.chrome !== void 0) shell.dataset.chrome = value.chrome;
+    if (value.chrome !== void 0) {
+      shell.dataset.chrome = value.chrome;
+      if (value.chrome === "none") settings.open = false;
+    }
     if (current && reflows && readingAnchor) {
       readingAnchor.restore?.();
       Object.assign(readingAnchor, { left: viewport.scrollLeft, top: viewport.scrollTop, width: viewport.clientWidth, height: viewport.clientHeight });
@@ -603,6 +613,7 @@ function createReader(container, options = {}) {
           get("toc").replaceChildren(list);
           get("source").textContent = result.source;
           get("warnings").textContent = result.warnings.map((w) => `${w.code}: ${w.message}`).join("\n");
+          settings.open = false;
           reader.hidden = false;
           viewport.scrollTop = 0;
           viewport.scrollLeft = 0;
@@ -660,6 +671,7 @@ function createReader(container, options = {}) {
     get("toc").replaceChildren();
     get("source").textContent = "";
     get("warnings").textContent = "";
+    settings.open = false;
     reader.hidden = true;
     errorBox.hidden = true;
     setBusy(false);
@@ -701,6 +713,14 @@ function createReader(container, options = {}) {
   }
   get("cancel").addEventListener("click", cancel, { signal: events.signal });
   get("close-book").addEventListener("click", close, { signal: events.signal });
+  settings.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && settings.open) {
+      event.preventDefault();
+      event.stopPropagation();
+      settings.open = false;
+      settings.querySelector("summary")?.focus({ preventScroll: true });
+    }
+  }, { signal: events.signal });
   font.addEventListener("input", () => setOptions({ fontSize: Number(font.value) }), { signal: events.signal });
   lineHeight.addEventListener("input", () => setOptions({ lineHeight: Number(lineHeight.value) }), { signal: events.signal });
   fontFamily.addEventListener("change", () => setOptions({ fontFamily: (

@@ -118,20 +118,20 @@ test('live typography preserves the reading text and native controls at narrow w
     const boundary=v.getBoundingClientRect().left+v.clientLeft+v.clientWidth-parseFloat(getComputedStyle(v).paddingRight);
     v.scrollLeft+=range.getBoundingClientRect().right-boundary;
   });
-  await page.locator('#reading-settings summary').click();
+  await page.locator('.book-bar #reading-settings summary').click();
   for(const [size,line,family] of [['32','2.4','gothic'],['16','1.6','mincho'],['24','2.2','gothic']]) {
-    await page.locator('#reading-settings').getByLabel('文字サイズ',{exact:true}).fill(size);await page.locator('#reading-settings').getByLabel('行間',{exact:true}).fill(line);await page.locator('#reading-settings').getByLabel('書体',{exact:true}).selectOption(family);
+    await page.locator('.book-bar #reading-settings').getByLabel('文字サイズ',{exact:true}).fill(size);await page.locator('.book-bar #reading-settings').getByLabel('行間',{exact:true}).fill(line);await page.locator('.book-bar #reading-settings').getByLabel('書体',{exact:true}).selectOption(family);
     await expect(host.locator('article')).toHaveCSS('font-size',`${size}px`);
     expect(await host.locator('article').evaluate(el=>parseFloat(getComputedStyle(el).lineHeight))).toBeCloseTo(Number(size)*Number(line),3);
     await expect(host.locator('article')).toHaveCSS('font-family',new RegExp(family==='gothic'?'Yu Gothic':'Yu Mincho'));
     const distance=await view.evaluate(v=>Math.abs(window.readingRange.getBoundingClientRect().right-(v.getBoundingClientRect().left+v.clientLeft+v.clientWidth-parseFloat(getComputedStyle(v).paddingRight))));
     expect(distance).toBeLessThan(154);await expect(host.locator('ruby').first()).toBeAttached();
   }
-  const slider=page.locator('#reading-settings').getByLabel('文字サイズ',{exact:true});await slider.fill('32');await slider.focus();
+  const slider=page.locator('.book-bar #reading-settings').getByLabel('文字サイズ',{exact:true});await slider.fill('32');await slider.focus();
   const before=await view.evaluate(v=>v.scrollLeft);await slider.press('ArrowRight');
   await expect(slider).toBeFocused();await expect(slider).toHaveValue('32');
   expect(await view.evaluate(v=>v.scrollLeft)).toBeCloseTo(before,1);
-  await slider.press('ArrowLeft');await expect(slider).toHaveValue('31');await expect(page.locator('#reading-settings #font-value')).toHaveText('31px');
+  await slider.press('ArrowLeft');await expect(slider).toHaveValue('31');await expect(page.locator('.book-bar #reading-settings #font-value')).toHaveText('31px');
   const fits=await page.locator('.settings-panel').evaluate(el=>{const b=el.getBoundingClientRect();return b.left>=0&&b.right<=innerWidth&&document.documentElement.scrollWidth<=innerWidth+1;});expect(fits).toBe(true);
   await page.keyboard.press('Escape');await expect(page.locator('.settings-panel')).toBeHidden();await expect(page.locator('#book-view')).toBeVisible();
   await page.locator('#next').click();expect(await view.evaluate(v=>Math.abs(v.scrollLeft))).toBeGreaterThan(Math.abs(before));
@@ -141,33 +141,33 @@ test('live typography preserves the reading text and native controls at narrow w
 test('plain day/night and optional embedded colors apply without changing the shelf',async({page},info)=>{
   const shelfColor=await page.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor);
   await page.route('**/books/chair/book.md',async route=>{const response=await route.fetch();await route.fulfill({response,body:(await response.text())+'\n\n[はじめへ](#h-1)\n'});});
-  await choose(page,'chair','椅子をひとつ');await page.locator('#read').click();await page.locator('#reading-settings summary').click();
+  await choose(page,'chair','椅子をひとつ');await page.locator('#read').click();await page.locator('.book-bar #reading-settings summary').click();
   const view=page.locator('#reader-mount #viewport'),link=page.locator('#reader-mount article a');
   const geometry=()=>view.evaluate(v=>({left:v.scrollLeft,width:v.clientWidth,height:v.clientHeight,extent:v.scrollWidth}));
   const before=await geometry();
   for(const [theme,bg,ink,blue] of [['paper','rgb(255, 255, 255)','rgb(0, 0, 0)','rgb(0, 0, 238)'],['night','rgb(0, 0, 0)','rgb(255, 255, 255)','rgb(102, 153, 255)']]) {
-    await page.locator('#reading-settings').getByLabel('配色',{exact:true}).selectOption(theme);
+    await page.locator('.book-bar #reading-settings').getByLabel('配色',{exact:true}).selectOption(theme);
     for(const locator of ['body','.paper','.settings-panel'])await expect(page.locator(locator)).toHaveCSS('background-color',bg);
-    await expect(view).toHaveCSS('color',ink);await expect(link).toHaveCSS('color',blue);await expect(page.locator('#reading-settings #font-size')).toHaveCSS('accent-color',blue);
+    await expect(view).toHaveCSS('color',ink);await expect(link).toHaveCSS('color',blue);await expect(page.locator('.book-bar #reading-settings #font-size')).toHaveCSS('accent-color',blue);
     expect(await geometry()).toEqual(before);
     await page.screenshot({path:`evidence/settings-${theme}-${info.project.name}.png`,fullPage:true});
   }
   await page.evaluate(()=>{for(const [key,value] of Object.entries({'paper-background':'#fffbea','paper-foreground':'#222222','paper-accent':'#0050aa','night-background':'#101010','night-foreground':'#eeeeee','night-accent':'#88b4ff'}))document.documentElement.style.setProperty(`--yompub-${key}`,value);});
   await expect(page.locator('body')).toHaveCSS('background-color','rgb(16, 16, 16)');await expect(view).toHaveCSS('color','rgb(238, 238, 238)');await expect(link).toHaveCSS('color','rgb(136, 180, 255)');
-  await page.locator('#reading-settings').getByLabel('配色',{exact:true}).selectOption('paper');
+  await page.locator('.book-bar #reading-settings').getByLabel('配色',{exact:true}).selectOption('paper');
   await expect(page.locator('body')).toHaveCSS('background-color','rgb(255, 251, 234)');await expect(view).toHaveCSS('color','rgb(34, 34, 34)');await expect(link).toHaveCSS('color','rgb(0, 80, 170)');
   await page.locator('#back').click();await expect(page.locator('body')).toHaveCSS('background-color',shelfColor);
   expect(await page.evaluate(()=>window.pageErrors)).toEqual([]);
 });
 
 test('settings follow book changes and cover without adding persistent storage',async({page})=>{
-  await choose(page,'chair','椅子をひとつ');await expect(page.locator('#reading-settings')).toBeHidden();await page.locator('#read').click();await page.locator('#reading-settings summary').click();
-  await page.locator('#reading-settings').getByLabel('文字サイズ',{exact:true}).fill('28');await page.locator('#reading-settings').getByLabel('行間',{exact:true}).fill('2.3');await page.locator('#reading-settings').getByLabel('書体',{exact:true}).selectOption('gothic');await page.locator('#reading-settings').getByLabel('配色',{exact:true}).selectOption('night');
-  await page.locator('#show-cover').click();await expect(page.locator('#reading-settings')).toBeHidden();await page.locator('#read').click();await expect(page.locator('.settings-panel')).toBeHidden();
+  await choose(page,'chair','椅子をひとつ');await expect(page.locator('.book-bar #reading-settings')).toBeHidden();await page.locator('#read').click();await page.locator('.book-bar #reading-settings summary').click();
+  await page.locator('.book-bar #reading-settings').getByLabel('文字サイズ',{exact:true}).fill('28');await page.locator('.book-bar #reading-settings').getByLabel('行間',{exact:true}).fill('2.3');await page.locator('.book-bar #reading-settings').getByLabel('書体',{exact:true}).selectOption('gothic');await page.locator('.book-bar #reading-settings').getByLabel('配色',{exact:true}).selectOption('night');
+  await page.locator('#show-cover').click();await expect(page.locator('.book-bar #reading-settings')).toBeHidden();await page.locator('#read').click();await expect(page.locator('.settings-panel')).toBeHidden();
   await page.locator('#back').click();await choose(page,'rain','雨のとどけ先');await page.locator('#read').click();
   const article=page.locator('#reader-mount article');await expect(article).toHaveCSS('font-size','28px');await expect(article).toHaveCSS('font-family',/Yu Gothic/);await expect(page.locator('body')).toHaveAttribute('data-reading-theme','night');
   expect(await article.evaluate(el=>parseFloat(getComputedStyle(el).lineHeight))).toBeCloseTo(64.4,3);
-  await page.locator('#reading-settings summary').click();await page.keyboard.press('Escape');await expect(page.locator('#reading-settings summary')).toBeFocused();await expect(page.locator('#book-view')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('[data-book="rain"]')).toBeFocused();
+  await page.locator('.book-bar #reading-settings summary').click();await page.keyboard.press('Escape');await expect(page.locator('.book-bar #reading-settings summary')).toBeFocused();await expect(page.locator('#book-view')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('[data-book="rain"]')).toBeFocused();
   await page.reload();await choose(page,'chair','椅子をひとつ');await page.locator('#read').click();await expect(article).toHaveCSS('font-size','20px');await expect(article).toHaveCSS('font-family',/Yu Mincho/);await expect(page.locator('body')).toHaveAttribute('data-reading-theme','paper');
   expect(await page.evaluate(()=>window.pageErrors)).toEqual([]);
 });
